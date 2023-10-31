@@ -2,20 +2,26 @@ push = require 'push'
 
 
 WINDOW = {
-    Width = 1180,
-    Height = 600,
-    VirtualWidth = 590,
-    VirtualHeight = 300
+    Width = 1391,
+    Height = 720,
+    VirtualWidth = 556,
+    VirtualHeight = 288
 }
 
-BACKGROUND_HEIGHT = 41
+BACKGROUND_HEIGHT = 20
+local BACKGROUND_LOOPING_POINT = 624.5
 
-local background = love.graphics.newImage('assets/background.jpg')
-local ground = love.graphics.newImage('assets/ground.jpg')
+local background = love.graphics.newImage('assets/background.png')
+local backgroundScroll = 0
+local BACKGROUND_SCROLL_SPEED = 45
+
+local ground = love.graphics.newImage('assets/ground.png')
+local groundScroll = 0
+local GROUND_SCROLL_SPEED = 90
 
 
 function love.load()
-    -- love.graphics.setDefaultFilter('nearest', 'nearest')
+    love.graphics.setDefaultFilter('nearest', 'nearest')
     love.window.setTitle('Flappy Bird')
 
     math.randomseed(os.time())
@@ -38,14 +44,18 @@ end
 
 
 function love.update(dt) 
-    
+    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) 
+        % BACKGROUND_LOOPING_POINT
+
+    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) 
+        % WINDOW.VirtualWidth
 end
 
 
 
 function drawUI()
-    love.graphics.draw(background, 0, 0)
-    love.graphics.draw(ground, 0, WINDOW.VirtualHeight - BACKGROUND_HEIGHT)
+    love.graphics.draw(background, -backgroundScroll, 0)
+    love.graphics.draw(ground, -groundScroll, WINDOW.VirtualHeight - BACKGROUND_HEIGHT)
 end
 
 function drawFPS()
