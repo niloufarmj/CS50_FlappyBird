@@ -1,5 +1,6 @@
 push = require 'push'
-
+Class = require 'class'
+require 'Bird'
 
 WINDOW = {
     Width = 1391,
@@ -18,6 +19,8 @@ local BACKGROUND_SCROLL_SPEED = 45
 local ground = love.graphics.newImage('assets/ground.png')
 local groundScroll = 0
 local GROUND_SCROLL_SPEED = 90
+
+local bird = Bird()
 
 
 function love.load()
@@ -53,7 +56,7 @@ end
 
 
 
-function drawUI()
+function drawBackground()
     love.graphics.draw(background, -backgroundScroll, 0)
     love.graphics.draw(ground, -groundScroll, WINDOW.VirtualHeight - BACKGROUND_HEIGHT)
 end
@@ -67,7 +70,9 @@ end
 function love.draw()
     push:apply('start')
 
-    drawUI()
+    drawBackground()
+
+    bird:render()
 
     drawFPS()
 
