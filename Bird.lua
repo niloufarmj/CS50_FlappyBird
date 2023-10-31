@@ -23,5 +23,10 @@ end
 
 function Bird:update(dt)
     self.dy = self.dy + GRAVITY * dt --acceleration of speed -> v = at
+
+    if love.keyboard.keysPressed['space'] then
+        self.dy = -2
+    end
+
     self.y = self.y + self.dy -- y += v
 end

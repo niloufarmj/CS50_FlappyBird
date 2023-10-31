@@ -39,6 +39,7 @@ function love.load()
         vsync = true
     })
 
+    love.keyboard.keysPressed = {}
 end
 
 function love.resize(w, h)
@@ -56,6 +57,8 @@ function love.update(dt)
 
     -- bird jump
     bird:update(dt)
+    
+    love.keyboard.keysPressed = {}
 end
 
 
@@ -86,7 +89,10 @@ end
 
 
 function love.keypressed(key)
+    love.keyboard.keysPressed[key] = true
+    
     if key == 'escape' then
         love.event.quit()
     end
+    
 end
