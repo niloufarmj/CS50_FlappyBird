@@ -1,14 +1,7 @@
---[[
-    Bird Class
-    Author: Colton Ogden
-    cogden@cs50.harvard.edu
-
-    The Bird is what we control in the game via clicking or the space bar; whenever we press either,
-    the bird will flap and go up a little bit, where it will then be affected by gravity. If the bird hits
-    the ground or a pipe, the game is over.
-]]
 
 Bird = Class{}
+
+local GRAVITY = 5
 
 function Bird:init()
     -- load bird image from disk and assign its width and height
@@ -19,8 +12,16 @@ function Bird:init()
     -- position bird in the middle of the screen
     self.x = WINDOW.VirtualWidth / 2 - (self.width / 2)
     self.y = WINDOW.VirtualHeight / 2 - (self.height / 2)
+
+    -- y speed
+    self.dy = 0
 end
 
 function Bird:render()
     love.graphics.draw(self.image, self.x, self.y)
+end
+
+function Bird:update(dt)
+    self.dy = self.dy + GRAVITY * dt --acceleration of speed -> v = at
+    self.y = self.y + self.dy -- y += v
 end

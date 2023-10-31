@@ -47,11 +47,15 @@ end
 
 
 function love.update(dt) 
+    -- move background
     backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) 
         % BACKGROUND_LOOPING_POINT
 
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) 
         % WINDOW.VirtualWidth
+
+    -- bird jump
+    bird:update(dt)
 end
 
 
@@ -59,6 +63,7 @@ end
 function drawBackground()
     love.graphics.draw(background, -backgroundScroll, 0)
     love.graphics.draw(ground, -groundScroll, WINDOW.VirtualHeight - BACKGROUND_HEIGHT)
+
 end
 
 function drawFPS()
