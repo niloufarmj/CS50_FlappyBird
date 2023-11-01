@@ -1,6 +1,7 @@
 push = require 'push'
 Class = require 'class'
 require 'Bird'
+require 'Pipe'
 
 WINDOW = {
     Width = 1391,
@@ -20,7 +21,12 @@ local ground = love.graphics.newImage('assets/ground.png')
 local groundScroll = 0
 local GROUND_SCROLL_SPEED = 90
 
+local PIPE_DISTANCE_SECONDS = 2
+
 local bird = Bird()
+
+local pipes = {}
+local spawnTimer = 0
 
 
 function love.load()
@@ -55,8 +61,24 @@ function love.update(dt)
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) 
         % WINDOW.VirtualWidth
 
+    spawnTimer = spawnTimer + dt
+
+    if spawnTimer > PIPE_DISTANCE_SECONDS then
+        table.insert(pipes, Pipe())
+        spawnTimer = 0
+    end
+
     -- bird jump
     bird:update(dt)
+
+    -- move pipes (like background)
+    for k, pipe in pairs(pipes) do
+        pipe:update(dt)
+
+        if pipe.x < -(pipe.width + 10)  then
+            table.remove(pipes, k)
+        end
+    end
     
     love.keyboard.keysPressed = {}
 end
@@ -81,6 +103,11 @@ function love.draw()
     drawBackground()
 
     bird:render()
+
+    for k, pipe in pairs(pipes) do
+        -- love.graphics.print('pipe' , 50, 50)
+        pipe:render()
+    end
 
     drawFPS()
 
