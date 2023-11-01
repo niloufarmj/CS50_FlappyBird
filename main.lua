@@ -21,6 +21,8 @@ local ground = love.graphics.newImage('assets/ground.png')
 local groundScroll = 0
 local GROUND_SCROLL_SPEED = 90
 
+local scrolling = true
+
 local PIPE_DISTANCE_SECONDS = 2
 
 local bird = Bird()
@@ -28,7 +30,7 @@ local bird = Bird()
 local pipes = {}
 local spawnTimer = 0
 
-local GAP_HEIGHT = 90
+local GAP_HEIGHT = 120
 
 local lastY = -PIPE_HEIGHT + math.random(80) + 20
 
@@ -58,17 +60,20 @@ end
 
 
 function love.update(dt) 
-    -- move background
-    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) 
-        % BACKGROUND_LOOPING_POINT
 
-    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) 
-        % WINDOW.VirtualWidth
+    if scrolling then
+        -- move background
+        backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) 
+            % BACKGROUND_LOOPING_POINT
 
-    handlePipesUpdate(dt)
+        groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) 
+            % WINDOW.VirtualWidth
 
-    -- bird jump
-    bird:update(dt)
+        handlePipesUpdate(dt)
+
+        -- bird jump
+        bird:update(dt)
+    end
     
     love.keyboard.keysPressed = {}
 end
@@ -77,7 +82,7 @@ function handlePipesUpdate(dt)
     spawnTimer = spawnTimer + dt
 
     if spawnTimer > PIPE_DISTANCE_SECONDS then
-        local y = math.max(-PIPE_HEIGHT + 10, math.min(lastY + math.random(-20, 20), WINDOW.VirtualHeight - 90 - PIPE_HEIGHT))
+        local y = math.max(-PIPE_HEIGHT + 40, math.min(lastY + math.random(-30, 30), WINDOW.VirtualHeight - 40 - PIPE_HEIGHT))
         lastY = y
 
         top_color = math.random(0, 1) == 0 and 'blue' or 'pink'
@@ -91,6 +96,12 @@ function handlePipesUpdate(dt)
     -- move pipes (like background)
     for k, pipe in pairs(pipes) do
         pipe:update(dt)
+
+        for k, pipe in pairs(pipes) do
+            if bird:collides(pipe) then
+                scrolling = false
+            end
+        end
 
         if pipe.x < -(PIPE_WIDTH + 10)  then
             table.remove(pipes, k)

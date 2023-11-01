@@ -1,4 +1,3 @@
-
 Bird = Class{}
 
 local GRAVITY = 5
@@ -15,6 +14,16 @@ function Bird:init()
 
     -- y speed
     self.dy = 0
+end
+
+function Bird:collides(pipe)
+    if (self.x) + (self.width - 8) >= pipe.x and self.x + 8 <= pipe.x + PIPE_WIDTH then
+        if (self.y) + (self.height - 8) >= pipe.y and self.y + 8 <= pipe.y + PIPE_HEIGHT then
+            return true
+        end
+    end
+
+    return false
 end
 
 function Bird:render()
