@@ -39,6 +39,14 @@ function love.load()
     mediumFont = love.graphics.newFont('assets/dpcomic.ttf', 26)
     hugeFont = love.graphics.newFont('assets/dpcomic.ttf', 56)
 
+    sounds = {
+        ['jump'] = love.audio.newSource('sounds/jump.wav', 'static'),
+        ['explosion'] = love.audio.newSource('sounds/explosion.wav', 'static'),
+        ['hurt'] = love.audio.newSource('sounds/hurt.wav', 'static'),
+        ['score'] = love.audio.newSource('sounds/score.wav', 'static'),
+        ['music'] = love.audio.newSource('sounds/music.wav', 'static')
+    }
+
     push:setupScreen(WINDOW.VirtualWidth, WINDOW.VirtualHeight, WINDOW.Width, WINDOW.Height, {
         fullscreen = false,
         resizable = true,
@@ -52,6 +60,9 @@ function love.load()
         ['countDown'] = function () return CountdownState() end,
     }
     gStateMachine:change('title')
+
+    sounds['music']:setLooping(true)
+    sounds['music']:play()
 
     love.keyboard.keysPressed = {}
 end

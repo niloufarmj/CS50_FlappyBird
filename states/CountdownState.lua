@@ -19,6 +19,7 @@ function CountdownState:update(dt)
     if self.timer > COUNTDOWN_TIME then
         self.timer = self.timer % COUNTDOWN_TIME
         self.count = self.count - 1
+        sounds['score']:play()
 
         if self.count == 0 then
             gStateMachine:change('play')
