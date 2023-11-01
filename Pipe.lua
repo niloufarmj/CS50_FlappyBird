@@ -14,6 +14,7 @@ function Pipe:init(orientation, y, color)
     self.y = y
     self.orientation = orientation
     self.color = color
+    self.scored = false
 
     if color == 'pink' and orientation == 'bottom' then
         self.image = PIPE_IMAGE_PINK

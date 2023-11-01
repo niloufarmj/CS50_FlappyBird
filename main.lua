@@ -7,6 +7,7 @@ require 'StateMachine'
 require 'states/BaseState'
 require 'states/PlayState'
 require 'states/TitleScreenState'
+require 'states/ScoreState'
 
 WINDOW = {
     Width = 1391,
@@ -26,7 +27,6 @@ local ground = love.graphics.newImage('assets/ground.png')
 local groundScroll = 0
 local GROUND_SCROLL_SPEED = 90
 
-local bird = Bird()
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -35,7 +35,7 @@ function love.load()
     math.randomseed(os.time())
 
     smallFont = love.graphics.newFont('dpcomic.ttf', 8)
-    mediumFont = love.graphics.newFont('dpcomic.ttf', 14)
+    mediumFont = love.graphics.newFont('dpcomic.ttf', 26)
     hugeFont = love.graphics.newFont('dpcomic.ttf', 56)
 
     push:setupScreen(WINDOW.VirtualWidth, WINDOW.VirtualHeight, WINDOW.Width, WINDOW.Height, {
@@ -47,6 +47,7 @@ function love.load()
     gStateMachine = StateMachine {
         ['title'] = function() return TitleScreenState() end,
         ['play'] = function() return PlayState() end,
+        ['score'] = function () return ScoreState() end,
     }
     gStateMachine:change('title')
 
@@ -56,8 +57,6 @@ end
 function love.resize(w, h)
     push:resize(w, h)
 end
-
-
 
 function love.update(dt) 
 

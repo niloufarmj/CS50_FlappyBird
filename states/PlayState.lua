@@ -7,6 +7,7 @@ function PlayState:init()
     self.bird = Bird()
     self.pipes = {}
     self.timer = 0
+    self.score = 0
 
     self.lastY = -PIPE_HEIGHT + math.random(80) + 20
 end
@@ -33,8 +34,11 @@ function PlayState:update(dt)
 
         for k, pipe in pairs(self.pipes) do
             if self.bird:collides(pipe) then
-                gStateMachine:change('title')
+                gStateMachine:change('score', {
+                    score = self.score
+                })
             end
+
         end
 
         if pipe.x < -(PIPE_WIDTH + 10)  then
@@ -42,12 +46,23 @@ function PlayState:update(dt)
         end
     end
 
+    for k, pipe in pairs(self.pipes) do
+        
+        if pipe.x + PIPE_WIDTH < self.bird.x and not pipe.scored and pipe.orientation == 'bottom' then
+            self.score = self.score + 1
+            pipe.scored = true
+        end
+        
+    end
+
     -- bird jump
     self.bird:update(dt)
 
     -- reset if we get to the ground
     if self.bird.y > WINDOW.VirtualHeight - GROUND_HEIGHT then
-        gStateMachine:change('title')
+        gStateMachine:change('score', {
+            score = self.score
+        })
     end
 end
 
@@ -57,5 +72,7 @@ function PlayState:render()
         pair:render()
     end
 
+    love.graphics.setFont(mediumFont)
+    love.graphics.print('Score: ' .. tostring(self.score), 8, 8)
     self.bird:render()
 end
