@@ -8,6 +8,7 @@ require 'states/BaseState'
 require 'states/PlayState'
 require 'states/TitleScreenState'
 require 'states/ScoreState'
+require 'states/CountDownState'
 
 WINDOW = {
     Width = 1391,
@@ -34,9 +35,9 @@ function love.load()
 
     math.randomseed(os.time())
 
-    smallFont = love.graphics.newFont('dpcomic.ttf', 8)
-    mediumFont = love.graphics.newFont('dpcomic.ttf', 26)
-    hugeFont = love.graphics.newFont('dpcomic.ttf', 56)
+    smallFont = love.graphics.newFont('assets/dpcomic.ttf', 8)
+    mediumFont = love.graphics.newFont('assets/dpcomic.ttf', 26)
+    hugeFont = love.graphics.newFont('assets/dpcomic.ttf', 56)
 
     push:setupScreen(WINDOW.VirtualWidth, WINDOW.VirtualHeight, WINDOW.Width, WINDOW.Height, {
         fullscreen = false,
@@ -48,6 +49,7 @@ function love.load()
         ['title'] = function() return TitleScreenState() end,
         ['play'] = function() return PlayState() end,
         ['score'] = function () return ScoreState() end,
+        ['countDown'] = function () return CountdownState() end,
     }
     gStateMachine:change('title')
 

@@ -7,7 +7,7 @@ end
 
 function ScoreState:update(dt)
     if love.keyboard.keysPressed['enter'] or love.keyboard.keysPressed['return'] then
-        gStateMachine:change('play')
+        gStateMachine:change('countDown')
     end
 end
 
