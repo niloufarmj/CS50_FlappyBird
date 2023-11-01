@@ -1,5 +1,8 @@
 Bird = Class{}
 
+BIRD_WIDTH = 33
+BIRD_HEIGHT = 26
+
 local GRAVITY = 5
 
 function Bird:init()
