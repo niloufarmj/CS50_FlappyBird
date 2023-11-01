@@ -28,6 +28,10 @@ local bird = Bird()
 local pipes = {}
 local spawnTimer = 0
 
+local GAP_HEIGHT = 90
+
+local lastY = -PIPE_HEIGHT + math.random(80) + 20
+
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -61,29 +65,38 @@ function love.update(dt)
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) 
         % WINDOW.VirtualWidth
 
-    spawnTimer = spawnTimer + dt
-
-    if spawnTimer > PIPE_DISTANCE_SECONDS then
-        table.insert(pipes, Pipe())
-        spawnTimer = 0
-    end
+    handlePipesUpdate(dt)
 
     -- bird jump
     bird:update(dt)
-
-    -- move pipes (like background)
-    for k, pipe in pairs(pipes) do
-        pipe:update(dt)
-
-        if pipe.x < -(pipe.width + 10)  then
-            table.remove(pipes, k)
-        end
-    end
     
     love.keyboard.keysPressed = {}
 end
 
+function handlePipesUpdate(dt) 
+    spawnTimer = spawnTimer + dt
 
+    if spawnTimer > PIPE_DISTANCE_SECONDS then
+        local y = math.max(-PIPE_HEIGHT + 10, math.min(lastY + math.random(-20, 20), WINDOW.VirtualHeight - 90 - PIPE_HEIGHT))
+        lastY = y
+
+        top_color = math.random(0, 1) == 0 and 'blue' or 'pink'
+        bottom_color = top_color == 'blue' and 'pink' or 'blue'
+
+        table.insert(pipes, Pipe('top', y, top_color))
+        table.insert(pipes, Pipe('bottom', y + PIPE_HEIGHT + GAP_HEIGHT, bottom_color))
+        spawnTimer = 0
+    end
+    
+    -- move pipes (like background)
+    for k, pipe in pairs(pipes) do
+        pipe:update(dt)
+
+        if pipe.x < -(PIPE_WIDTH + 10)  then
+            table.remove(pipes, k)
+        end
+    end
+end
 
 function drawBackground()
     love.graphics.draw(background, -backgroundScroll, 0)
