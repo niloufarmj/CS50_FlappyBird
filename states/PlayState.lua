@@ -1,13 +1,17 @@
 PlayState = Class{__includes = BaseState}
 
+local INITIAL_GAP_HEIGHT = 90 
+local MIN_GAP_HEIGHT = 90
+local MAX_GAP_HEIGHT = 140
+
 local PIPE_DISTANCE_SECONDS = 2
-local GAP_HEIGHT = 120
 
 function PlayState:init()
     self.bird = Bird()
     self.pipes = {}
     self.timer = 0
     self.score = 0
+    self.currentGapHeight = INITIAL_GAP_HEIGHT
 
     self.lastY = -PIPE_HEIGHT + math.random(80) + 20
 end
@@ -23,8 +27,15 @@ function PlayState:update(dt)
         local top_color = math.random(0, 1) == 0 and 'blue' or 'pink'
         local bottom_color = top_color == 'blue' and 'pink' or 'blue'
 
+        -- calculate gap height
+        -- a number between -30 to 30 is added to the gap height randomly each time
+        -- gap height is always between min and max values
+        local range = math.min(30, math.min(MAX_GAP_HEIGHT - self.currentGapHeight, self.currentGapHeight - MIN_GAP_HEIGHT))
+        self.currentGapHeight = self.currentGapHeight + math.random(-range, range)
+        self.currentGapHeight = math.min(MAX_GAP_HEIGHT - math.random(0, 15), math.max(MIN_GAP_HEIGHT + math.random(0, 15), self.currentGapHeight))
+
         table.insert(self.pipes, Pipe('top', y, top_color))
-        table.insert(self.pipes, Pipe('bottom', y + PIPE_HEIGHT + GAP_HEIGHT, bottom_color))
+        table.insert(self.pipes, Pipe('bottom', y + PIPE_HEIGHT + self.currentGapHeight, bottom_color))
         self.timer = 0
     end
     

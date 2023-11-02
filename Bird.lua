@@ -3,7 +3,7 @@ Bird = Class{}
 BIRD_WIDTH = 33
 BIRD_HEIGHT = 26
 
-local GRAVITY = 5
+local GRAVITY = 6
 
 function Bird:init()
     -- load bird image from disk and assign its width and height
