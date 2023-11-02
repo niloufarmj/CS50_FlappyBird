@@ -73,6 +73,12 @@ function PlayState:update(dt)
             self.score = self.score + 1
             pipe.scored = true
             sounds['score']:play()
+
+            if self.score >= 30 then
+                gStateMachine:change('score', {
+                    score = self.score
+                })
+            end
         end
         
     end
