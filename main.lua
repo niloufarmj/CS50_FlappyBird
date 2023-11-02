@@ -28,6 +28,8 @@ local ground = love.graphics.newImage('assets/ground.png')
 local groundScroll = 0
 local GROUND_SCROLL_SPEED = 90
 
+local paused = false
+local paused_image = love.graphics.newImage('assets/pause.png')
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -44,6 +46,7 @@ function love.load()
         ['explosion'] = love.audio.newSource('sounds/explosion.wav', 'static'),
         ['hurt'] = love.audio.newSource('sounds/hurt.wav', 'static'),
         ['score'] = love.audio.newSource('sounds/score.wav', 'static'),
+        ['pause'] = love.audio.newSource('sounds/pause.mp3', 'static'),
         ['music'] = love.audio.newSource('sounds/music.wav', 'static')
     }
 
@@ -73,10 +76,12 @@ end
 
 function love.update(dt) 
 
-    -- move background
-    updateBackground(dt)
+    if not paused then
+        -- move background
+        updateBackground(dt)
 
-    gStateMachine:update(dt)
+        gStateMachine:update(dt)
+    end
 
     love.keyboard.keysPressed = {}
 end
@@ -105,11 +110,29 @@ function love.draw()
     drawBackground()
     gStateMachine:render()
 
+    if paused then
+        love.graphics.draw(paused_image, WINDOW.VirtualWidth / 2 - 65, WINDOW.VirtualHeight / 2 - 65)
+    end
+
     push:apply('end')
 end
 
 function love.keypressed(key)
     love.keyboard.keysPressed[key] = true
+
+    if key == 'p' and gStateMachine.currentName == 'play' then
+        paused = not paused
+        sounds['pause']:play()
+
+        if paused then
+            -- Pause the background music
+            backgroundMusicPosition = sounds['music']:tell()
+            sounds['music']:pause()
+        else
+            sounds['music']:play()
+            sounds['music']:seek(backgroundMusicPosition)
+        end
+    end
     
     if key == 'escape' then
         love.event.quit()
