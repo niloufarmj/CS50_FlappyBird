@@ -93,7 +93,27 @@ https://github.com/niloufarmj/CS50_FlappyBird/assets/46811379/7ab8f8fe-38b1-40a9
 add sound effects to the game + GAME IS DONE!
 
 
+
 https://github.com/niloufarmj/CS50_FlappyBird/assets/46811379/834565b1-96e3-4fd6-b8dd-286e3792eb9d
 
+## step 12
 
+Randomize the gap between pipes (vertical space) 
+Randomize the interval at which pairs of pipes spawn
+Implement a pause feature
+add award system and win game state
+
+
+
+
+https://github.com/niloufarmj/CS50_FlappyBird/assets/46811379/04b7418c-d499-473e-b645-aff13203503e
+
+
+
+https://github.com/niloufarmj/CS50_FlappyBird/assets/46811379/c8a1172b-0eff-4f76-8c1a-2550c9eac3ee
+
+
+
+
+https://github.com/niloufarmj/CS50_FlappyBird/assets/46811379/39864ef6-4514-4a72-bddf-a2e9f55863b2
 
