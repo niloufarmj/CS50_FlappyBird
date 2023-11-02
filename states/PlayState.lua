@@ -4,7 +4,8 @@ local INITIAL_GAP_HEIGHT = 90
 local MIN_GAP_HEIGHT = 90
 local MAX_GAP_HEIGHT = 140
 
-local PIPE_DISTANCE_SECONDS = 2
+local MAX_SPWAN_TIME = 4
+local MIN_SPAWN_TIME = 2
 
 function PlayState:init()
     self.bird = Bird()
@@ -12,6 +13,7 @@ function PlayState:init()
     self.timer = 0
     self.score = 0
     self.currentGapHeight = INITIAL_GAP_HEIGHT
+    self.spawnTime = MAX_SPWAN_TIME
 
     self.lastY = -PIPE_HEIGHT + math.random(80) + 20
 end
@@ -20,7 +22,7 @@ function PlayState:update(dt)
     -- update timer for pipe spawning
     self.timer = self.timer + dt
 
-    if self.timer > PIPE_DISTANCE_SECONDS then
+    if self.timer > self.spawnTime then
         local y = math.max(-PIPE_HEIGHT + 40, math.min(self.lastY + math.random(-30, 30), WINDOW.VirtualHeight - 40 - PIPE_HEIGHT))
         self.lastY = y
 
@@ -36,6 +38,12 @@ function PlayState:update(dt)
 
         table.insert(self.pipes, Pipe('top', y, top_color))
         table.insert(self.pipes, Pipe('bottom', y + PIPE_HEIGHT + self.currentGapHeight, bottom_color))
+
+        self.spawnTime = MIN_SPAWN_TIME + (math.random(-20, 250) / 100) * (MAX_SPWAN_TIME / (self.score * 0.7 + 1))
+
+        self.spawnTime = math.max(self.spawnTime, MIN_SPAWN_TIME) -- ensure the minimum spawn time is 2 seconds
+        self.spawnTime = math.min(MAX_SPWAN_TIME, self.spawnTime) -- ensure the minimum spawn time is 4 seconds
+
         self.timer = 0
     end
     
